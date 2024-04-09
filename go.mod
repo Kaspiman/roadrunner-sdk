@@ -1,8 +1,6 @@
 module github.com/roadrunner-server/sdk/v4
 
-go 1.22.1
-
-toolchain go1.22.2
+go 1.22.2
 
 require (
 	github.com/goccy/go-json v0.10.2
