@@ -31,8 +31,8 @@ type sr struct {
 	err error
 }
 
-// SpawnWorkerWithContext Creates new Process and connects it to goridge relay,
-// method Wait() must be handled on level above.
+// SpawnWorkerWithContext Creates a new Process and connects it to goridge relay,
+// method Wait() must be handled on the level above.
 func (f *Factory) SpawnWorkerWithContext(ctx context.Context, cmd *exec.Cmd, options ...worker.Options) (*worker.Process, error) {
 	spCh := make(chan sr)
 	go func() {

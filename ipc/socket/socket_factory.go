@@ -3,7 +3,6 @@ package socket
 import (
 	"context"
 	stderr "errors"
-	"fmt"
 	"net"
 	"os/exec"
 	"sync"
@@ -50,7 +49,8 @@ func NewSocketServer(ls net.Listener, log *zap.Logger) *Factory {
 					return
 				}
 			}
-			fmt.Printf("[WARN]: socket server listen, error: %v\n", err)
+
+			log.Warn("socket server listen", zap.Error(err))
 		}
 	}()
 
@@ -85,7 +85,7 @@ type socketSpawn struct {
 	err error
 }
 
-// SpawnWorkerWithContext Creates Process and connects it to appropriate relay or return an error
+// SpawnWorkerWithContext Creates a Process and connects it to the appropriate relay or return an error
 func (f *Factory) SpawnWorkerWithContext(ctx context.Context, cmd *exec.Cmd, options ...worker.Options) (*worker.Process, error) {
 	c := make(chan socketSpawn)
 	go func() {
@@ -119,7 +119,7 @@ func (f *Factory) SpawnWorkerWithContext(ctx context.Context, cmd *exec.Cmd, opt
 		if err != nil {
 			_ = w.Kill()
 			select {
-			// try to write result
+			// try to write a result
 			case c <- socketSpawn{
 				w:   nil,
 				err: err,
