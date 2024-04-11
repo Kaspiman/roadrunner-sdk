@@ -2,6 +2,7 @@ package socket
 
 import (
 	"context"
+	stderr "errors"
 	"fmt"
 	"net"
 	"os/exec"
@@ -43,7 +44,8 @@ func NewSocketServer(ls net.Listener, log *zap.Logger) *Factory {
 		err := f.listen()
 		// there is no logger here, use fmt
 		if err != nil {
-			if opErr, ok := err.(*net.OpError); ok {
+			var opErr *net.OpError
+			if stderr.As(err, &opErr) {
 				if opErr.Err.Error() == "use of closed network connection" {
 					return
 				}
